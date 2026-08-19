@@ -1,0 +1,46 @@
+# ──────────────────────────────────────────────────────────────────
+# config.yaml — Central configuration for the RAG Pipeline
+#
+# Override any value by setting the corresponding env variable in .env
+# ──────────────────────────────────────────────────────────────────
+
+# ── Embedding model ────────────────────────────────────────────────
+embedding:
+  model_name: "all-MiniLM-L6-v2"   # HuggingFace sentence-transformer model
+  vector_dim: 384                   # Output dimension (must match vectordb setting)
+
+# ── Chunking ───────────────────────────────────────────────────────
+chunking:
+  threshold_percentile: 90.0        # Cosine-distance percentile for semantic split boundary
+
+# ── Vector database (PostgreSQL + pgvector) ───────────────────────
+vectordb:
+  table_name: "document_chunks"
+  vector_dim: 384                   # Must match embedding.vector_dim
+
+# ── LLM (Gemini) ──────────────────────────────────────────────────
+llm:
+  model_name: "gemini-2.5-flash"
+  # api_key: set via GEMINI_API_KEY in .env (never put secrets here)
+
+# ── Ingestion ──────────────────────────────────────────────────────
+ingestion:
+  documents_dir: "documents"        # Folder scanned for PDF/text files
+  supported_extensions:
+    - ".pdf"
+    - ".txt"
+
+# ── Retrieval ──────────────────────────────────────────────────────
+retrieval:
+  top_k: 3                          # Number of chunks returned per query
+
+# ── API server (FastAPI) ───────────────────────────────────────────
+api:
+  host: "0.0.0.0"
+  port: 8000
+  reload: false                     # Set true for local development hot-reload
+
+# ── Logging ────────────────────────────────────────────────────────
+logging:
+  log_file: "logs/app.log"
+  level: "INFO"                     # DEBUG | INFO | WARNING | ERROR
